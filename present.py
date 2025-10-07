@@ -9,7 +9,7 @@ from sklearn.metrics import r2_score
 from scipy.stats import norm
 
 df = pd.read_csv('candy-data.csv')
-
+st.set_page_config(page_title="Candy Data Analysis", layout="wide", page_icon="🍬")
 st.title('Candy Dataset Overview')
 
 st.header('First 10 Rows of the Dataset')
@@ -90,8 +90,8 @@ st.write("_Fruity and Pluribus co-occur frequently with strong relative strength
 
 '# Win distributions'
 'The dataset only provides winpercent as a measure of popularity, without raw vote counts or distribution details. This limits the depth of statistical analysis possible, as we cannot assess variance or confidence intervals for winpercent values.'
-st.subheader("Top 5 Candies by Win Percent")
-top5 = df.sort_values('winpercent', ascending=False).head(5)
+st.subheader("Top 10 Candies by Win Percent")
+top5 = df.sort_values('winpercent', ascending=False).head(10)
 st.dataframe(top5[['competitorname', 'winpercent']+features], hide_index=True)
 
 st.subheader('Win Percent Distribution by Feature')
@@ -214,7 +214,7 @@ coeffs = pd.DataFrame({
 st.subheader("Feature Coefficients (Linear Regression)")
 st.dataframe(coeffs, hide_index=True)
 
-st.header("Regression: Including Selected Pairs and Triples (Top 10 Features)")
+st.header("Regression: Including Selected Pairs and Triples")
 # Add selected pairs and triples as new binary features
 def make_combo_feature(df, combo):
     return df[list(combo)].all(axis=1).astype(int)
@@ -248,8 +248,8 @@ with st.expander("Model Selection & Parameters", expanded=True):
         reg_ext = Lasso(alpha=alpha_val)
     else:
         reg_ext = LinearRegression()
-
-if st.checkbox("Use SelectKBest to pick top features for regression", value=False):
+use_only_top_features = st.checkbox("Use only top features from original regression", value=False)
+if use_only_top_features:
     # SelectKBest to select top 10 features for regression with extended features
     from sklearn.feature_selection import SelectKBest, f_regression
     max_k = min(15, X_ext.shape[1])
@@ -267,15 +267,15 @@ reg_ext.fit(X_train_ext, y_train_ext)
 y_pred_ext = reg_ext.predict(X_test_ext)
 y_train_pred_ext = reg_ext.predict(X_train_ext)
 
-st.write(f"Test R² score (extended, top 10 features): {r2_score(y_test_ext, y_pred_ext):.3f}")
-st.write(f"Train R² score (extended, top 10 features): {r2_score(y_train_ext, y_train_pred_ext):.3f}")
+st.write(f"Test R² score (extended{", top 10 features" if use_only_top_features else ""}): {r2_score(y_test_ext, y_pred_ext):.3f}")
+st.write(f"Train R² score (extended{", top 10 features" if use_only_top_features else ""}): {r2_score(y_train_ext, y_train_pred_ext):.3f}")
 
 coeffs_ext = pd.DataFrame({
     'Feature': X_ext_selected.columns,
     'Coefficient': reg_ext.coef_
 }).sort_values('Coefficient', key=abs, ascending=False)
 
-st.subheader("Feature Coefficients (Extended Regression, Top 10 Features)")
+st.subheader(f"Feature Coefficients (Extended Regression{', Top 10 Features' if use_only_top_features else ''})")
 st.dataframe(coeffs_ext, hide_index=True)
 
 '''
