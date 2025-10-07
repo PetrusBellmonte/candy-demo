@@ -1,5 +1,5 @@
 # ----------- Builder stage -----------
-FROM python:3.11-slim AS builder
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN pip-compile pyproject.toml --output-file requirements.txt && \
     pip wheel --wheel-dir=/app/wheels -r requirements.txt
 
 # ----------- Final stage -----------
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
