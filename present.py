@@ -275,7 +275,7 @@ coeffs_ext = pd.DataFrame({
     'Coefficient': reg_ext.coef_
 }).sort_values('Coefficient', key=abs, ascending=False)
 
-st.subheader(f"Feature Coefficients (Extended Regression{', Top 10 Features' if use_only_top_features else ''})")
+st.subheader(f"Feature Coefficients (Extended Regression{", Top 10 Features" if use_only_top_features else ""})")
 st.dataframe(coeffs_ext, hide_index=True)
 
 '''
