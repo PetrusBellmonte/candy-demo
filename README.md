@@ -23,5 +23,8 @@ Furthermore, the nature of the "winpercentage" favours uncontroversial popular s
 #### Data not particularly useful for the task
 This dataset heavily focuses on what people like (or not) but does not touch on brand loyalty/flexibility, perceived product complexity or similar aspects probably important for no-name products.
 
+#### American Halloween data
+The datasets is restricted to American Halloween data and presumably reflects american tastes. As Hershey's allegedly tastes a little bit like vomit to europeans, findings on this dataset might not reflect non-american tastes.
+
 ## Acknowledgement
 AI was heavily used in writing this code. This is neither especially good nor complex code. It is only intended for data exploration and playing around!
